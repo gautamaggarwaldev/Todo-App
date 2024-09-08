@@ -42,3 +42,21 @@ h1{
     border-radius: 5px;
     cursor: pointer;
 }
+
+ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+li:hover {
+    background-color: aliceblue;
+}
+
+li:last-child {
+    border-bottom: none;
+}
