@@ -76,3 +76,7 @@ li:last-child {
     background-color: var(--btn-active);
     transition: 0.3s;
 }
+
+.todoItem {
+    letter-spacing: 1px;
+}
