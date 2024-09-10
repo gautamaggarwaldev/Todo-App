@@ -5,7 +5,7 @@ function loadTodos() {
     return todos;
 }
 
-
+ 
 function addTodoToLocalStorage(todoText) {
     const todos = loadTodos();
     todos.todoList.push(todoText);
@@ -15,11 +15,29 @@ function addTodoToLocalStorage(todoText) {
 
 function appendTodoInHtml(todoText) {
     const todoList = document.getElementById("todoList");
-    const todo = document.createElement("li"); 
 
-    todo.textContent = todoText;
+    const todoItem = document.createElement("li"); 
+    todoItem.textContent = todoText;
+    todoItem.classList.add('todoItem');
+
+
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.classList.add("editBtn");
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.classList.add("deleteBtn");
+
+    const completedBtn = document.createElement("button");
+    completedBtn.textContent = "Completed";
+    completedBtn.classList.add("completedBtn");
+
+    todoItem.appendChild(editBtn);
+    todoItem.appendChild(deleteBtn);
+    todoItem.appendChild(completedBtn);
     
-    todoList.appendChild(todo);
+    todoList.appendChild(todoItem);
 }
 
 
