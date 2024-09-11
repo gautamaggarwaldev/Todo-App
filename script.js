@@ -6,19 +6,51 @@ function loadTodos() {
 }
 
  
-function addTodoToLocalStorage(todoText) {
+function addTodoToLocalStorage(todo) {
     const todos = loadTodos();
-    todos.todoList.push(todoText);
+    todos.todoList.push(todo);
     localStorage.setItem("todos", JSON.stringify(todos));
 }
 
 
-function appendTodoInHtml(todoText) {
+function executeFilterAction(event) {
+    const todoList = document.getElementById("todoList");
+    const element = event.target;
+    const value = element.getAttribute("data-filter");
+    todoList.innerHTML = '';
+    const todos = loadTodos();
+    if(value == "all") {
+        console.log(todoList);
+        todos.todoList.forEach(todo => {
+            appendTodoInHtml(todo);
+        })
+    }
+    else if(value == "pending") {
+        todos.todoList.forEach(todo => {
+            if(todo.isCompleted !== true)
+                appendTodoInHtml(todo);
+        })
+    }
+    else { // value == "completed"
+        todos.todoList.forEach(todo => {
+            if(todo.isCompleted === true)
+                appendTodoInHtml(todo);
+        })
+    }
+}
+
+function appendTodoInHtml(todo) {
     const todoList = document.getElementById("todoList");
 
-    const todoItem = document.createElement("li"); 
-    todoItem.textContent = todoText;
+    const todoItem = document.createElement("li");
+    
+    const textDiv = document.createElement("div");
+    
+    textDiv.textContent = todo.text;
     todoItem.classList.add('todoItem');
+
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("todoButtons");
 
 
     const editBtn = document.createElement("button");
@@ -31,11 +63,14 @@ function appendTodoInHtml(todoText) {
 
     const completedBtn = document.createElement("button");
     completedBtn.textContent = "Completed";
-    completedBtn.classList.add("completedBtn");
+    completedBtn.classList.add("completeBtn");
 
-    todoItem.appendChild(editBtn);
-    todoItem.appendChild(deleteBtn);
-    todoItem.appendChild(completedBtn);
+    wrapper.appendChild(editBtn);
+    wrapper.appendChild(deleteBtn);
+    wrapper.appendChild(completedBtn);
+
+    todoItem.appendChild(textDiv);
+    todoItem.appendChild(wrapper);
     
     todoList.appendChild(todoItem);
 }
@@ -47,6 +82,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const submitButton = document.getElementById("addTodo");
     const todoList = document.getElementById("todoList");
 
+    const filterBtns = document.getElementsByClassName("filterBtn");
+
+    console.log(filterBtns);
+    for(const btn of filterBtns) {
+        btn.addEventListener("click", executeFilterAction)
+    }
+
 
     submitButton.addEventListener("click", (event) => {
         const todoText = todoInput.value;
@@ -54,8 +96,8 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Please write something for todo")
         }
         else {
-            addTodoToLocalStorage(todoText);
-            appendTodoInHtml(todoText);
+            addTodoToLocalStorage({text: todoText, isCompleted: false});
+            appendTodoInHtml({text: todoText, isCompleted: false});
             todoInput.value = "";
         }
     });
@@ -71,9 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const todos = loadTodos();
 
     todos.todoList.forEach(todo => {
-        const newTodoItem = document.createElement("li");
-        newTodoItem.textContent = todo;
-        todoList.appendChild(newTodoItem);
+        appendTodoInHtml(todo);
     });
 
 });
